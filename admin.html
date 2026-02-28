@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — API Configuration</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      overflow-y: auto;
+    }
+    
+    .admin-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .admin-panel-box {
+      width: 100%;
+      max-width: 700px;
+      background: rgba(15, 15, 30, 0.7);
+      border: 2px solid var(--neon-cyan);
+      border-radius: 20px;
+      padding: 40px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 40px rgba(0, 240, 255, 0.2);
+      animation: slideInUp 0.6s ease-out;
+    }
+
+    .admin-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .admin-header h1 {
+      color: var(--neon-cyan);
+      font-size: 2.5em;
+      margin: 0;
+      text-shadow: 0 0 20px var(--neon-cyan);
+      margin-bottom: 10px;
+    }
+
+    .admin-header p {
+      color: var(--neon-magenta);
+      font-size: 0.9em;
+      margin: 0;
+      opacity: 0.8;
+    }
+
+    .admin-back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 240, 255, 0.1);
+      border: 2px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    .admin-back-btn:hover {
+      background: var(--neon-cyan);
+      color: #000f1e;
+      box-shadow: 0 0 20px var(--neon-cyan);
+    }
+
+    .config-section {
+      margin-bottom: 30px;
+    }
+
+    .config-section h3 {
+      color: var(--neon-magenta);
+      font-size: 1.2em;
+      margin: 0 0 15px 0;
+      border-bottom: 2px solid var(--neon-purple);
+      padding-bottom: 10px;
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .config-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .config-input {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .config-input label {
+      color: var(--neon-cyan);
+      font-size: 0.9em;
+      margin-bottom: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .config-input input {
+      background: rgba(0, 240, 255, 0.05);
+      border: 2px solid rgba(0, 240, 255, 0.3);
+      color: var(--neon-cyan);
+      padding: 12px 15px;
+      border-radius: 8px;
+      font-size: 0.95em;
+      font-family: 'Courier New', monospace;
+      transition: all 0.3s ease;
+    }
+
+    .config-input input::placeholder {
+      color: rgba(0, 240, 255, 0.4);
+    }
+
+    .config-input input:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+      background: rgba(0, 240, 255, 0.1);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+    }
+
+    .config-input input[type="password"]:focus {
+      background: rgba(255, 0, 255, 0.05);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .admin-button {
+      padding: 15px 30px;
+      border-radius: 8px;
+      border: 2px solid;
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--neon-cyan);
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .admin-button:hover {
+      box-shadow: 0 0 20px var(--neon-cyan);
+      transform: translateY(-2px);
+    }
+
+    #save-config {
+      border-color: var(--neon-cyan);
+    }
+
+    #clear-config {
+      border-color: var(--neon-magenta);
+      color: var(--neon-magenta);
+    }
+
+    #clear-config:hover {
+      box-shadow: 0 0 20px var(--neon-magenta);
+    }
+
+    .status-message {
+      text-align: center;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      display: none;
+      animation: slideInUp 0.3s ease-out;
+    }
+
+    .status-message.success {
+      background: rgba(0, 240, 255, 0.1);
+      border: 2px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      display: block;
+    }
+
+    .status-message.error {
+      background: rgba(255, 0, 0, 0.1);
+      border: 2px solid #ff0080;
+      color: #ff0080;
+      display: block;
+    }
+
+    .config-info {
+      background: rgba(157, 0, 255, 0.1);
+      border-left: 4px solid var(--neon-purple);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9em;
+      line-height: 1.6;
+    }
+
+    .config-info strong {
+      color: var(--neon-purple);
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="cyber-bg">
+    <canvas id="particle-canvas"></canvas>
+    <div class="glow-orb glow-1"></div>
+    <div class="glow-orb glow-2"></div>
+    <div class="glow-orb glow-3"></div>
+  </div>
+
+  <!-- Back Button -->
+  <a href="index.html" class="admin-back-btn">
+    <i class="fas fa-arrow-left"></i> Back to Portfolio
+  </a>
+
+  <!-- Admin Container -->
+  <div class="admin-container">
+    <div class="admin-panel-box">
+      <div class="admin-header">
+        <h1>⚡ ADMIN PANEL</h1>
+        <p>Configure your APIs for real-time updates</p>
+      </div>
+
+      <div class="config-info">
+        <strong>✓ Local Storage:</strong> All settings are stored locally in your browser. No data is sent to any server. Clear browser cache to reset configuration.
+      </div>
+
+      <!-- GitHub Section -->
+      <div class="config-section">
+        <h3><i class="fab fa-github"></i> GitHub</h3>
+        <div class="config-grid">
+          <div class="config-input">
+            <label>GitHub Username</label>
+            <input type="text" id="github-username" placeholder="your-github-username">
+          </div>
+        </div>
+      </div>
+
+      <!-- YouTube Section -->
+      <div class="config-section">
+        <h3><i class="fab fa-youtube"></i> YouTube</h3>
+        <div class="config-grid">
+          <div class="config-input">
+            <label>YouTube handle or ID</label>
+            <input type="text" id="yt-channel-id" placeholder="e.g. yourChannel or UCxxxxxxxx">
+          </div>
+          <div class="config-input">
+            <label>API Key</label>
+            <input type="password" id="yt-api-key" placeholder="Your API v3 key">
+          </div>
+        </div>
+      </div>
+
+      <!-- Twitch Section -->
+      <div class="config-section">
+        <h3><i class="fab fa-twitch"></i> Twitch</h3>
+        <div class="config-grid">
+          <div class="config-input">
+            <label>Username</label>
+            <input type="text" id="twitch-username" placeholder="your-twitch-username">
+          </div>
+          <div class="config-input">
+            <label>Access Token</label>
+            <input type="password" id="twitch-api-key" placeholder="Your OAuth token">
+          </div>
+          <div class="config-input">
+            <label>Client ID (optional)</label>
+            <input type="text" id="twitch-client-id" placeholder="Twitch Client ID">
+          </div>
+        </div>
+      </div>
+
+      <!-- TikTok Section -->
+      <div class="config-section">
+        <h3><i class="fab fa-tiktok"></i> TikTok</h3>
+        <div class="config-grid">
+          <div class="config-input">
+            <label>Username</label>
+            <input type="text" id="tiktok-username" placeholder="@your-tiktok-handle">
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="button-group">
+        <button id="save-config" class="admin-button">
+          <i class="fas fa-save"></i> Save Config
+        </button>
+        <button id="clear-config" class="admin-button">
+          <i class="fas fa-trash"></i> Clear Config
+        </button>
+      </div>
+
+      <!-- Status Message -->
+      <div id="status-message" class="status-message"></div>
+    </div>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script>
+    // Load current config values
+    const apiManager = new APIManager();
+    document.getElementById('github-username').value = apiManager.config.github || '';
+    document.getElementById('yt-channel-id').value = apiManager.config.yt_channel || '';
+    document.getElementById('yt-api-key').value = apiManager.config.yt_api_key || '';
+    document.getElementById('twitch-username').value = apiManager.config.twitch_username || '';
+    document.getElementById('twitch-api-key').value = apiManager.config.twitch_api_key || '';
+    document.getElementById('twitch-client-id').value = apiManager.config.twitch_client_id || '';
+    document.getElementById('tiktok-username').value = apiManager.config.tiktok_username || '';
+
+    // Save config
+    document.getElementById('save-config').addEventListener('click', () => {
+      const newConfig = {
+        github: document.getElementById('github-username').value,
+        yt_channel: document.getElementById('yt-channel-id').value,
+        yt_api_key: document.getElementById('yt-api-key').value,
+        twitch_username: document.getElementById('twitch-username').value,
+        twitch_api_key: document.getElementById('twitch-api-key').value,
+        twitch_client_id: document.getElementById('twitch-client-id').value,
+        tiktok_username: document.getElementById('tiktok-username').value
+      };
+
+      apiManager.saveConfig(newConfig);
+
+      const statusMsg = document.getElementById('status-message');
+      statusMsg.className = 'status-message success';
+      statusMsg.innerHTML = '<i class="fas fa-check-circle"></i> Configuration saved! Redirecting...';
+      
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 1500);
+    });
+
+    // Clear config
+    document.getElementById('clear-config').addEventListener('click', () => {
+      if (confirm('Are you sure? This will clear all saved configuration.')) {
+        localStorage.removeItem('portfolioConfig');
+        
+        const statusMsg = document.getElementById('status-message');
+        statusMsg.className = 'status-message success';
+        statusMsg.innerHTML = '<i class="fas fa-check-circle"></i> Configuration cleared!';
+        
+        document.getElementById('github-username').value = '';
+        document.getElementById('yt-channel-id').value = '';
+        document.getElementById('yt-api-key').value = '';
+        document.getElementById('twitch-username').value = '';
+        document.getElementById('twitch-api-key').value = '';
+        document.getElementById('twitch-client-id').value = '';
+        document.getElementById('tiktok-username').value = '';
+
+        setTimeout(() => {
+          statusMsg.className = 'status-message';
+        }, 2000);
+      }
+    });
+
+    // Particle system (same as main portfolio)
+    class ParticleSystem {
+      constructor() {
+        this.canvas = document.getElementById('particle-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        this.animate();
+      }
+
+      resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+
+      addParticle(x, y) {
+        const size = Math.random() * 3 + 1;
+        const speedX = (Math.random() - 0.5) * 4;
+        const speedY = (Math.random() - 0.5) * 4;
+        const color = Math.random() > 0.5 ? 'rgba(0, 240, 255, 0.8)' : 'rgba(255, 0, 255, 0.8)';
+        this.particles.push({ x, y, size, speedX, speedY, life: 1, color });
+      }
+
+      animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.speedX;
+          p.y += p.speedY;
+          p.life -= 0.02;
+
+          this.ctx.fillStyle = p.color.replace('0.8', p.life);
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          this.ctx.fill();
+
+          if (p.life <= 0) this.particles.splice(i, 1);
+        }
+
+        requestAnimationFrame(() => this.animate());
+      }
+    }
+
+    new ParticleSystem();
+
+    // Mouse tracking
+    document.addEventListener('mousemove', (e) => {
+      if (Math.random() > 0.7) {
+        document.particleSystem?.addParticle?.(e.clientX, e.clientY);
+      }
+    });
+  </script>
+</body>
+</html>

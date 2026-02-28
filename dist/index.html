@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paul — Futuristic Creator Nexus</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="cyber-bg">
+    <canvas id="particle-canvas"></canvas>
+    <div class="glow-orb glow-1"></div>
+    <div class="glow-orb glow-2"></div>
+    <div class="glow-orb glow-3"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-brand">
+        <span class="neon-text">PAUL</span>
+        <div class="brand-line"></div>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="#home" class="nav-link"><span>HOME</span></a></li>
+        <li><a href="#live" class="nav-link"><span>LIVE</span></a></li>
+        <li><a href="#projects" class="nav-link"><span>PROJECTS</span></a></li>
+        <li><a href="#connect" class="nav-link"><span>CONNECT</span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="title-line">WELCOME TO</span>
+        <span class="title-main neon-glow">CYBER REALM</span>
+        <span class="title-line">OF CREATION</span>
+      </h1>
+      <p class="hero-subtitle">Creator • Developer • Innovator</p>
+      <div class="hero-description">
+        Building immersive experiences across digital dimensions
+      </div>
+      <a href="#live" class="cyber-button">
+        <span>ENTER REALM</span>
+        <div class="button-glow"></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Live Status Section -->
+  <section class="live-section" id="live">
+    <div class="container">
+      <h2 class="section-title neon-text">LIVE STREAMS</h2>
+      <div class="live-grid">
+        <!-- YouTube -->
+        <div class="live-card youtube-card">
+          <div class="live-header">
+            <i class="fab fa-youtube"></i>
+            <span>YouTube</span>
+            <div class="status-indicator" id="yt-status"></div>
+          </div>
+          <div class="live-content">
+            <div id="yt-live-preview" class="live-preview">Checking live status...</div>
+            <div id="yt-videos" class="videos-list"></div>
+          </div>
+          <a id="yt-link" href="#" target="_blank" class="stream-link disabled">
+            GO TO CHANNEL <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- Twitch -->
+        <div class="live-card twitch-card">
+          <div class="live-header">
+            <i class="fab fa-twitch"></i>
+            <span>Twitch</span>
+            <div class="status-indicator" id="twitch-status"></div>
+          </div>
+          <div class="live-content">
+            <div id="twitch-live-preview" class="live-preview">Checking live status...</div>
+            <div id="twitch-viewers" class="viewers-info"></div>
+          </div>
+          <a id="twitch-link" href="#" target="_blank" class="stream-link disabled">
+            JOIN STREAM <i class="fas fa-play"></i>
+          </a>
+        </div>
+
+        <!-- TikTok -->
+        <div class="live-card tiktok-card">
+          <div class="live-header">
+            <i class="fab fa-tiktok"></i>
+            <span>TikTok</span>
+            <div class="status-indicator" id="tiktok-status"></div>
+          </div>
+          <div class="live-content">
+            <div id="tiktok-live-preview" class="live-preview">Check profile for LIVE</div>
+          </div>
+          <a id="tiktok-link" href="#" target="_blank" class="stream-link disabled">
+            WATCH LIVE <i class="fas fa-camera"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects/GitHub Section -->
+  <section class="projects-section" id="projects">
+    <div class="container">
+      <h2 class="section-title neon-text">REPOSITORIES</h2>
+      <div id="github-repos" class="repos-grid">
+        <p class="loading-text">Loading repositories...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Connect Section -->
+  <section class="connect-section" id="connect">
+    <div class="container">
+      <h2 class="section-title neon-text">DIGITAL NODES</h2>
+
+      <div class="social-grid">
+        <!-- GitHub -->
+        <a href="#" id="github-link" target="_blank" class="social-node github-node" data-platform="github">
+          <div class="node-icon"><i class="fab fa-github"></i></div>
+          <span class="node-label">GitHub</span>
+          <div class="node-stats" id="github-stats">--</div>
+        </a>
+
+        <!-- YouTube -->
+        <a href="#" id="youtube-node" target="_blank" class="social-node youtube-node" data-platform="youtube">
+          <div class="node-icon"><i class="fab fa-youtube"></i></div>
+          <span class="node-label">YouTube</span>
+          <div class="node-stats" id="yt-stats">--</div>
+        </a>
+
+        <!-- Twitch -->
+        <a href="#" id="twitch-node" target="_blank" class="social-node twitch-node" data-platform="twitch">
+          <div class="node-icon"><i class="fab fa-twitch"></i></div>
+          <span class="node-label">Twitch</span>
+          <div class="node-stats" id="twitch-stats">--</div>
+        </a>
+
+        <!-- TikTok -->
+        <a href="#" id="tiktok-node" target="_blank" class="social-node tiktok-node" data-platform="tiktok">
+          <div class="node-icon"><i class="fab fa-tiktok"></i></div>
+          <span class="node-label">TikTok</span>
+          <div class="node-stats" id="tiktok-stats">--</div>
+        </a>
+
+        <!-- Discord -->
+        <a href="#" id="discord-node" target="_blank" class="social-node discord-node">
+          <div class="node-icon"><i class="fab fa-discord"></i></div>
+          <span class="node-label">Discord</span>
+          <div class="node-stats">Server</div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+        <p class="footer-text">© 2026 PAUL NEXUS | Building the Digital Future</p>
+      </div>
+      <div class="footer-glow"></div>
+    </div>
+  </footer>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script>
+    // Load data when page is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadAllData);
+    } else {
+      loadAllData();
+    }
+    // Refresh data every 2 minutes
+    setInterval(loadAllData, 120000);
+  </script>
+</body>
+</html>
