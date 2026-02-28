@@ -12,6 +12,7 @@ function throttle(func, limit) {
 
 // Detect mobile device
 const isMobile = () => window.innerWidth <= 768 || /Mobi|Android|iPhone/.test(navigator.userAgent);
+const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Particle System
 class ParticleSystem {
@@ -19,7 +20,7 @@ class ParticleSystem {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.particles = [];
-    this.maxParticles = isMobile() ? 20 : 50;  // limit particles
+    this.maxParticles = isMobile() ? 12 : 34;
     this.resize();
     window.addEventListener('resize', () => this.resize());
     this.animate();
@@ -83,12 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initParticles() {
   const canvas = document.getElementById('particle-canvas');
-  if (canvas) {
+  if (canvas && !prefersReducedMotion()) {
     window.particleSystem = new ParticleSystem(canvas);
     
     // throttled mousemove to reduce event firing
     const throttledAdd = throttle((e) => {
-      if (!isMobile() && Math.random() > 0.85) {
+      if (!isMobile() && Math.random() > 0.9) {
         window.particleSystem.addParticle(e.clientX, e.clientY);
       }
     }, 50);
@@ -136,6 +137,8 @@ function initNavigation() {
 }
 
 function initScrollEffects() {
+  if (prefersReducedMotion()) return;
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -228,18 +231,20 @@ style.textContent = `
 document.head.appendChild(style);
 
 // Subtle hover for section titles (no glitch)
-document.querySelectorAll('.section-title').forEach(title => {
-  title.addEventListener('mouseenter', function() {
-    this.style.transition = 'color 0.25s ease, text-shadow 0.25s ease';
-    this.style.color = 'var(--accent)';
-    this.style.textShadow = '0 0 6px rgba(255,140,0,0.12)';
-  });
+if (!prefersReducedMotion()) {
+  document.querySelectorAll('.section-title').forEach(title => {
+    title.addEventListener('mouseenter', function() {
+      this.style.transition = 'color 0.25s ease, text-shadow 0.25s ease';
+      this.style.color = 'var(--accent)';
+      this.style.textShadow = '0 0 6px rgba(255,140,0,0.12)';
+    });
 
-  title.addEventListener('mouseleave', function() {
-    this.style.color = '';
-    this.style.textShadow = '';
+    title.addEventListener('mouseleave', function() {
+      this.style.color = '';
+      this.style.textShadow = '';
+    });
   });
-});
+}
 
 
 
